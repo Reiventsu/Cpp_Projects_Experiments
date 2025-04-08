@@ -10,4 +10,4 @@ The sub-directories of the repository are all named as accurately as possible to
 You may use this collection of projects as you see fit whether it be to study, educate, create derivations or further, it is up to you. The knowledge is free and available.
 
 ## License
-The code in this repository is subject to the [MIT](https://choosealicense.com/licenses/mit/) license however I appreciate if you let people know where the code was gotten from as they too may find help from perusing all my mistakes.
+The code in this repository is subject to the [MIT](https://opensource.org/license/mit) license however I appreciate if you let people know where the code was gotten from as they too may find help from perusing all my mistakes.
