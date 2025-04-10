@@ -11,15 +11,6 @@ Color darkGreen = Color(43, 51, 24, 255);
 int cellSize = 30;
 int cellCount = 25;
 
-void printWorkingDirectory() {
-    char cwd[1024];
-    if (getcwd(cwd, sizeof(cwd)) != nullptr) {
-        std::cout << "Current working directory: " << cwd << std::endl;
-    } else {
-        std::cerr << "Error getting current working directory." << std::endl;
-    }
-}
-
 class Food {
 public:
     Vector2 position = {5, 6};
@@ -45,7 +36,6 @@ public:
 };
 
 int main() {
-    printWorkingDirectory();
     std::cout << "Starting the game..." << std::endl;
     InitWindow(cellSize * cellCount, cellSize * cellCount, "Snake Game");
     SetTargetFPS(60);
