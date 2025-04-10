@@ -5,6 +5,7 @@
 
 // Custom libraries
 #include "raylib.h"
+#include "raymath.h"
 
 // Standard libraries
 #include <iostream>

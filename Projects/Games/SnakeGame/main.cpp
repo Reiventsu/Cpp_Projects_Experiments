@@ -11,10 +11,27 @@ auto darkGreen = Color(43, 51, 24, 255);
 int cellSize = 30;
 int cellCount = 25;
 
+double lastUpdateTime = 0;
+
+bool eventTriggered(const double interval) {
+    if (const double currentTime = GetTime(); currentTime - lastUpdateTime >= interval) {
+        lastUpdateTime = currentTime;
+        return true;
+    }
+    return false;
+}
+
 // Using a deque for the snake object
 class Snake {
 public:
     std::deque<Vector2> body = {Vector2{6, 9}, Vector2{5, 9}, Vector2{4, 9}};
+    Vector2 direction = {1, 0};
+
+    void UpdateSnake() {
+        body.pop_back();
+        const Vector2 newHead = Vector2Add(body.front(), direction);
+        body.push_front(newHead);
+    }
 
     void drawSnake() const {
         for (const auto &[x, y]: body) {
@@ -24,7 +41,6 @@ public:
                 static_cast<float>(cellSize),
                 static_cast<float>(cellSize)
             };
-
             DrawRectangleRounded(segment, 0.5, 6, darkGreen);
         }
     }
@@ -72,10 +88,14 @@ int main() {
     SetTargetFPS(60);
 
     const auto food = Food();
-    const auto snake = Snake();
+    auto snake = Snake();
 
     while (WindowShouldClose() == false) {
         BeginDrawing();
+
+        if (eventTriggered(0.2)) {
+            snake.UpdateSnake();
+        }
 
         ClearBackground(green);
         food.drawFood();
