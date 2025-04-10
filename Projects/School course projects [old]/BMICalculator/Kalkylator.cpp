@@ -166,8 +166,8 @@ void calcBMR() {
         std::cout << "\nHur aktiv är du?\n";
         std::cout << "\n1. Stillasittande (ingen ansträngande aktivitet)\n";
         std::cout << "2. Lätt aktivitet (lätt ansträngning 1-3 dagar i veckan) \n";
-        std::cout << "3. Lagomt aktiv (Lagom ansträngning 3-5 dagar i veckan)\n";
-        std::cout << "4. Väldigt aktiv (nsträngande träning 6-7 dagar i veckan)\n";
+        std::cout << "3. Lagom aktiv (Lagom ansträngning 3-5 dagar i veckan)\n";
+        std::cout << "4. Väldigt aktiv (Ansträngande träning 6-7 dagar i veckan)\n";
         std::cout << "5. Extremt aktiv (Krävande fysisk aktivitet eller träning 2 gånger per dag)\n";
         std::cout << "\nAnge ett val (1-5): ";
         std::cin >> activityLevel;
@@ -189,7 +189,7 @@ void calcBMR() {
             multiplierAcLvlBMR = 1.375; // Lätt aktiv
             break;
         case 3:
-            multiplierAcLvlBMR = 1.55; // Lagomt aktiv
+            multiplierAcLvlBMR = 1.55; // Lagom aktiv
             break;
         case 4:
             multiplierAcLvlBMR = 1.725; // Väldigt aktiv
