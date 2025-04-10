@@ -17,11 +17,7 @@ public:
     Texture2D texture;
 
     Food() {
-        Image image = LoadImage("../Graphics/food.png");
-        if (image.data == nullptr) {
-            TraceLog(LOG_ERROR, "Failed to load image: Graphics/food.png");
-            return;
-        }
+        Image image = LoadImage("../Graphics/FoodImage.png");
         texture = LoadTextureFromImage(image);
         UnloadImage(image);
     }
