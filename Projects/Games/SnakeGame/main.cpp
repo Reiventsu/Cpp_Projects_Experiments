@@ -1,33 +1,68 @@
-//
 // Created by rei on 4/9/25.
-//
+//This project is written in CLion, and so I use its Clang-Tidy and I do follow it pretty blindly and try to resolve every suggestion it has
+// Unless it breaks something, and I'm doing this because I'm making the assumption it'll teach me something about maintainable and well-structured code.
 
 #include "pch.h"
-#include "raylib.h"
 
-Color green = Color(173, 204, 96, 255);
-Color darkGreen = Color(43, 51, 24, 255);
+// Essential
+auto green = Color(173, 204, 96, 255);
+auto darkGreen = Color(43, 51, 24, 255);
 
 int cellSize = 30;
 int cellCount = 25;
 
+// Using a deque for the snake object
+class Snake {
+public:
+    std::deque<Vector2> body = {Vector2{6, 9}, Vector2{5, 9}, Vector2{4, 9}};
+
+    void drawSnake() const {
+        for (const auto &[x, y]: body) {
+            const auto segment = Rectangle{
+                x * static_cast<float>(cellSize),
+                y * static_cast<float>(cellSize),
+                static_cast<float>(cellSize),
+                static_cast<float>(cellSize)
+            };
+
+            DrawRectangleRounded(segment, 0.5, 6, darkGreen);
+        }
+    }
+};
+
+// Class for food for the snake to eat
 class Food {
 public:
-    Vector2 position = {5, 6};
-    Texture2D texture;
+    Vector2 position{};
+    Texture2D texture{};
 
     Food() {
-        Image image = LoadImage("../Graphics/FoodImage.png");
+        const Image image = LoadImage("../Graphics/FoodImage.png");
         texture = LoadTextureFromImage(image);
         UnloadImage(image);
+        position = GenerateRandomPos();
     }
 
     ~Food() {
         UnloadTexture(texture);
     }
 
-    void drawFood() {
-        DrawTexture(texture, position.x * cellSize, position.y * cellSize, WHITE);
+    void drawFood() const {
+        DrawTexture(
+            texture,
+            static_cast<int>(position.x) * cellSize,
+            static_cast<int>(position.y) * cellSize,
+            WHITE
+        );
+    }
+
+    static Vector2 GenerateRandomPos() {
+        const int x = GetRandomValue(0, cellCount - 1);
+        const int y = GetRandomValue(0, cellCount - 1);
+        return Vector2{
+            static_cast<float>(x),
+            static_cast<float>(y)
+        };
     }
 };
 
@@ -36,13 +71,15 @@ int main() {
     InitWindow(cellSize * cellCount, cellSize * cellCount, "Snake Game");
     SetTargetFPS(60);
 
-    Food food = Food();
+    const auto food = Food();
+    const auto snake = Snake();
 
     while (WindowShouldClose() == false) {
         BeginDrawing();
 
         ClearBackground(green);
         food.drawFood();
+        snake.drawSnake();
 
 
         EndDrawing();
