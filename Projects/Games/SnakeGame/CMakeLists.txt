@@ -2,11 +2,8 @@ cmake_minimum_required(VERSION 3.20)
 project(SnakeGame)
 
 set(CMAKE_CXX_STANDARD 20)
-find_package(raylib CONFIG REQUIRED)
-find_package(glfw3 CONFIG REQUIRED)
-find_package(NanoSVG CONFIG REQUIRED)
+find_package(raylib glfw3 NanoSVG CONFIG REQUIRED)
 find_package(Stb REQUIRED)
-
 
 add_executable(SnakeGame
         main.cpp
