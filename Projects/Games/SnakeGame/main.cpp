@@ -129,9 +129,9 @@ public:
             snake.UpdateSnake();
             CheckCollisionWithFood();
             CheckCollisionWithEdges();
+            CheckCollisionWithTail();
         }
     }
-
 
     void Draw() const {
         food.drawFood();
@@ -143,6 +143,14 @@ public:
             GameOver();
         }
         if (snake.body.front().y == static_cast<float>(cellCount) || snake.body.front().y == -1) {
+            GameOver();
+        }
+    }
+
+    void CheckCollisionWithTail() {
+        std::deque<Vector2> headlessBody = snake.body;
+        headlessBody.pop_front();
+        if (ElementInDeque(snake.body.front(), headlessBody)) {
             GameOver();
         }
     }
