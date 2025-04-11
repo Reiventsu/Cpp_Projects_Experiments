@@ -1,10 +1,12 @@
 // Created by rei on 4/9/25.
+
 //This project is written in CLion, and so I use its Clang-Tidy and I do follow it pretty blindly and try to resolve every suggestion it has
-// Unless it breaks something, and I'm doing this because I'm making the assumption it'll teach me something about maintainable and well-structured code.
+// unless it breaks something, and I'm doing this because I'm making the assumption it'll teach me something
+// about best-practices as well as maintainable, well-structured code.
 
 #include "pch.h"
 
-// Essential
+// Global values
 auto green = Color(173, 204, 96, 255);
 auto darkGreen = Color(43, 51, 24, 255);
 
@@ -21,7 +23,7 @@ bool eventTriggered(const double interval) {
     return false;
 }
 
-// Using a deque for the snake object
+// Le snek
 class Snake {
 public:
     std::deque<Vector2> body = {Vector2{6, 9}, Vector2{5, 9}, Vector2{4, 9}};
@@ -82,38 +84,51 @@ public:
     }
 };
 
+class SnakeGame {
+    public:
+    Snake snake = Snake();
+    Food food = Food();
+
+    void Draw() const {
+        food.drawFood();
+        snake.drawSnake();
+    }
+
+    void Update() {
+        snake.UpdateSnake();
+    }
+
+};
+
 int main() {
     std::cout << "Starting the game..." << std::endl;
     InitWindow(cellSize * cellCount, cellSize * cellCount, "Snake Game");
     SetTargetFPS(60);
 
-    const auto food = Food();
-    auto snake = Snake();
+    auto game = SnakeGame();
 
     while (WindowShouldClose() == false) {
         BeginDrawing();
 
         if (eventTriggered(0.2)) {
-            snake.UpdateSnake();
+            game.snake.UpdateSnake();
         }
 
-        if (IsKeyPressed(KEY_UP)) {
-            snake.direction = {0, -1};
+        if (IsKeyPressed(KEY_UP) && game.snake.direction.y != 1) {
+            game.snake.direction = {0, -1};
         }
-        if (IsKeyPressed(KEY_DOWN)) {
-            snake.direction = {0, 1};
+        if (IsKeyPressed(KEY_DOWN) && game.snake.direction.y != -1) {
+            game.snake.direction = {0, 1};
         }
-        if (IsKeyPressed(KEY_LEFT)) {
-            snake.direction = {-1, 0};
+        if (IsKeyPressed(KEY_LEFT) && game.snake.direction.x != 1) {
+            game.snake.direction = {-1, 0};
         }
-        if (IsKeyPressed(KEY_RIGHT)) {
-            snake.direction = {1, 0};
+        if (IsKeyPressed(KEY_RIGHT) && game.snake.direction.x != -1) {
+            game.snake.direction = {1, 0};
         }
 
         ClearBackground(green);
-        food.drawFood();
-        snake.drawSnake();
-
+        game.Draw();
 
         EndDrawing();
     }
