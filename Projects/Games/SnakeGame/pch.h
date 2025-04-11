@@ -6,7 +6,7 @@
 // Custom libraries
 #include "raylib.h"
 #include "raymath.h"
-
-// Standard libraries
 #include <iostream>
 #include <deque>
+#include <algorithm>
+#include <ranges>
