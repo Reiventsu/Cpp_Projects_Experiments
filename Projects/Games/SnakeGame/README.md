@@ -13,6 +13,11 @@ Focus of this project is to create a small snake game simply because I want to, 
 my first problem. Importing libraries to use. I have many options, either try to manually add it or make from source, use vcpkg or conan.
 I haven't decided which way to go yet, but I'll be testing the different routes out.
 
+> #### Controls
+> Use the arrow keys to move the snake, when the snake "dies" 
+by hitting the wall or itself it will reset to initial position. 
+Use ESC or close the game window to quit.
+
 ---
 
 ```
