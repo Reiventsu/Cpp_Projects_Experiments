@@ -22,8 +22,14 @@ Use ESC or close the game window to quit.
 ---
 
 ```
-Project status: In progress!
+Project status: Almost done!
 
 Planned fixes: 
-- null :3
+- Due to the games interval based update it is possible to
+  collide with yourself by very quickly pressing the
+  arrow keys and colliding into yourself, 
+  I will find a way to prevent this from happening.
+
+- I would like to add a menu of some kind in the future possibly.
+  or at least some extra polish to the game to test my skills.
 ```
