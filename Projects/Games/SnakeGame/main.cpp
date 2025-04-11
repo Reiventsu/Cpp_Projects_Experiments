@@ -12,6 +12,7 @@ auto darkGreen = Color(43, 51, 24, 255);
 
 int cellSize = 30;
 int cellCount = 25;
+int offset = 75;
 
 double lastUpdateTime = 0;
 
@@ -48,8 +49,8 @@ public:
     void drawSnake() const {
         for (const auto &[x, y]: body) {
             const auto segment = Rectangle{
-                x * static_cast<float>(cellSize),
-                y * static_cast<float>(cellSize),
+                static_cast<float>(offset) + x * static_cast<float>(cellSize),
+                static_cast<float>(offset) + y * static_cast<float>(cellSize),
                 static_cast<float>(cellSize),
                 static_cast<float>(cellSize)
             };
@@ -83,8 +84,8 @@ public:
     void drawFood() const {
         DrawTexture(
             texture,
-            static_cast<int>(position.x) * cellSize,
-            static_cast<int>(position.y) * cellSize,
+            offset + static_cast<int>(position.x) * cellSize,
+            offset + static_cast<int>(position.y) * cellSize,
             WHITE
         );
     }
@@ -165,7 +166,7 @@ public:
 
 int main() {
     std::cout << "Starting the game..." << std::endl;
-    InitWindow(cellSize * cellCount, cellSize * cellCount, "Snake Game");
+    InitWindow(2 * offset + cellSize * cellCount, 2 * offset + cellSize * cellCount, "Snake Game");
     SetTargetFPS(60);
 
     auto game = SnakeGame();
@@ -195,6 +196,13 @@ int main() {
         }
 
         ClearBackground(green);
+        DrawRectangleLinesEx(Rectangle{
+                                 static_cast<float>(offset) - 5,
+                                 static_cast<float>(offset) - 5,
+                                 static_cast<float>(cellSize * cellCount + 10),
+                                 static_cast<float>(cellSize * cellCount + 10)
+                             },
+                             5, darkGreen);
         game.Draw();
         EndDrawing();
     }
