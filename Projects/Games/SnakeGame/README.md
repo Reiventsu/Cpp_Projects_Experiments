@@ -26,10 +26,7 @@ Use [SPACE] to boost!
 Project status: Almost done!
 
 Planned fixes: 
-- Due to the games interval based update it is possible to
-  collide with yourself by very quickly pressing the
-  arrow keys and colliding into yourself, 
-  I will find a way to prevent this from happening.
+- You shouldn't be able to 180 yourself anymore due to the input validation system.
 
 - I would like to add a menu of some kind in the future possibly.
   or at least some extra polish to the game to test my skills.
