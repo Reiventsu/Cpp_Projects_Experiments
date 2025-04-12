@@ -168,14 +168,29 @@ int main() {
     std::cout << "Starting the game..." << std::endl;
     InitWindow(2 * offset + cellSize * cellCount, 2 * offset + cellSize * cellCount, "Snake Game");
     SetTargetFPS(60);
+    float accumulatedTime = 0.0f;
 
     auto game = SnakeGame();
 
-    while (WindowShouldClose() == false) {
+    while (!WindowShouldClose()) {
         BeginDrawing();
 
-        if (eventTriggered(0.2)) {
+        // I wanted to add a boost mechanic to the snake and through Google and talking to a few friends I implemented this.
+        constexpr float moveInterval = 0.2f;
+        const float deltaTime = GetFrameTime();
+        accumulatedTime += deltaTime;
+
+        float speedMultiplier = 0.0f;
+        if (IsKeyDown(KEY_SPACE)) {
+            speedMultiplier = 2.0f;
+        } else {
+            speedMultiplier = 1.0f;
+        }
+        const float effectiveInterval = moveInterval / speedMultiplier;
+
+        while (accumulatedTime >= effectiveInterval) {
             game.Update();
+            accumulatedTime -= effectiveInterval;
         }
 
         if (IsKeyPressed(KEY_UP) && game.snake.direction.y != 1) {

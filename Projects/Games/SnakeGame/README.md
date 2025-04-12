@@ -15,9 +15,10 @@ I haven't decided which way to go yet, but I'll be testing the different routes 
 
 > [!TIP] 
 > #### Controls
-> Use the arrow keys to move the snake, when the snake "dies" 
-by hitting the wall or itself it will reset to initial position. Press any arrow key to continue the game.  
-Use ESC or close the game window to quit.
+> Use the [ARROW KEYS] to move the snake, when the snake "dies" 
+by hitting the wall or itself it will reset to initial position. Press any [ARROW KEY] to continue the game.  
+Use [ESC] or close the game window to quit.  
+Use [SPACE] to boost!
 
 ---
 
