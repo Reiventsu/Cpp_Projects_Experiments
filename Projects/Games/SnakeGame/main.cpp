@@ -129,6 +129,7 @@ public:
     Snake snake;
     Food food;
     bool gameRunning = true;
+    int gameScore = 0;
 
     SnakeGame() : food(snake.body) {
         snake.Reset();
@@ -139,6 +140,7 @@ public:
             std::cout << "Eating Food" << std::endl;
             food.position = Food::GenerateRandomPos(snake.body);
             snake.shouldGrow = true;
+            gameScore++;
         }
     }
 
@@ -201,13 +203,14 @@ int main() {
         if (!game.gameRunning && IsKeyPressed(KEY_SPACE)) {
             game.gameRunning = true;
             game.snake.Reset();
+            game.gameScore = 0;
         }
 
         constexpr float moveInterval = 0.2f;
         const float deltaTime = GetFrameTime();
         accumulatedTime += deltaTime;
 
-        float speedMultiplier = 1.0f;
+        float speedMultiplier;
         if (IsKeyDown(KEY_SPACE)) {
             speedMultiplier = 2.0f;
         } else {
@@ -229,15 +232,22 @@ int main() {
                              },
                              5, darkGreen);
 
+        DrawText(TextFormat("%i", game.gameScore), offset - 5, offset + cellSize * cellCount + 10, 40, darkGreen);
         game.Draw();
 
         if (!game.gameRunning) {
             DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), Fade(BLACK, 0.6f));
 
             DrawText("GAME OVER!",
-                     offset + cellSize * cellCount / 2 - MeasureText("GAME OVER!", 50) / 2,
-                     offset + cellSize * cellCount / 2 - 50,
-                     50, green);
+                     offset + cellSize * cellCount / 2 - MeasureText("GAME OVER!", 70) / 2,
+                     offset + cellSize * cellCount / 2 - 120,
+                     70, green);
+
+            const char *scoreText = TextFormat("your score was: %i", game.gameScore);
+            DrawText(scoreText,
+                     offset + cellSize * cellCount / 2 - MeasureText(scoreText, 40) / 2,
+                     offset + cellSize * cellCount / 2 - 40,
+                     40, green);
 
             DrawText("Press SPACE to restart or ESC to close",
                      offset + cellSize * cellCount / 2 - MeasureText("Press SPACE to Restart or ESC to close", 30) / 2,
