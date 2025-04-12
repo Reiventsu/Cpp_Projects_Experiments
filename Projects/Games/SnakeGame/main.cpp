@@ -34,10 +34,25 @@ bool eventTriggered(const double interval) {
 class Snake {
 public:
     std::deque<Vector2> body = {Vector2{6, 9}, Vector2{5, 9}, Vector2{4, 9}};
-    Vector2 direction = {1, 0};
+    Vector2 direction{};
+    Vector2 nextDirection{};
     bool shouldGrow = false;
 
+    void ProcessInput(const Vector2 newDirection) {
+        if (newDirection.x == -direction.x && newDirection.y == -direction.y) return;
+
+        if ((newDirection.x == 0 || direction.x == 0) &&
+            (newDirection.y == 0 || direction.y == 0)) {
+            nextDirection = newDirection;
+        }
+    }
+
     void UpdateSnake() {
+        if (nextDirection.x != 0 || nextDirection.y != 0) {
+            direction = nextDirection;
+            nextDirection = {0, 0};
+        }
+
         const Vector2 newHead = Vector2Add(body.front(), direction);
         body.push_front(newHead);
         if (!shouldGrow) {
@@ -61,6 +76,7 @@ public:
     void Reset() {
         body = {Vector2{6, 9}, Vector2{5, 9}, Vector2{4, 9}};
         direction = {1, 0};
+        nextDirection = {0, 0};
     }
 };
 
@@ -115,6 +131,7 @@ public:
     bool gameRunning = true;
 
     SnakeGame() : food(snake.body) {
+        snake.Reset();
     }
 
     void CheckCollisionWithFood() {
@@ -164,6 +181,7 @@ public:
     }
 };
 
+// main function of the program makes the window and handles input that interact with the other parts of the program.
 int main() {
     std::cout << "Starting the game..." << std::endl;
     InitWindow(2 * offset + cellSize * cellCount, 2 * offset + cellSize * cellCount, "Snake Game");
@@ -175,12 +193,21 @@ int main() {
     while (!WindowShouldClose()) {
         BeginDrawing();
 
-        // I wanted to add a boost mechanic to the snake and through Google and talking to a few friends I implemented this.
+        if (IsKeyPressed(KEY_UP)) game.snake.ProcessInput({0, -1});
+        if (IsKeyPressed(KEY_DOWN)) game.snake.ProcessInput({0, 1});
+        if (IsKeyPressed(KEY_LEFT)) game.snake.ProcessInput({-1, 0});
+        if (IsKeyPressed(KEY_RIGHT)) game.snake.ProcessInput({1, 0});
+
+        if (!game.gameRunning && IsKeyPressed(KEY_SPACE)) {
+            game.gameRunning = true;
+            game.snake.Reset();
+        }
+
         constexpr float moveInterval = 0.2f;
         const float deltaTime = GetFrameTime();
         accumulatedTime += deltaTime;
 
-        float speedMultiplier = 0.0f;
+        float speedMultiplier = 1.0f;
         if (IsKeyDown(KEY_SPACE)) {
             speedMultiplier = 2.0f;
         } else {
@@ -193,23 +220,6 @@ int main() {
             accumulatedTime -= effectiveInterval;
         }
 
-        if (IsKeyPressed(KEY_UP) && game.snake.direction.y != 1) {
-            game.snake.direction = {0, -1};
-            game.gameRunning = true;
-        }
-        if (IsKeyPressed(KEY_DOWN) && game.snake.direction.y != -1) {
-            game.snake.direction = {0, 1};
-            game.gameRunning = true;
-        }
-        if (IsKeyPressed(KEY_LEFT) && game.snake.direction.x != 1) {
-            game.snake.direction = {-1, 0};
-            game.gameRunning = true;
-        }
-        if (IsKeyPressed(KEY_RIGHT) && game.snake.direction.x != -1) {
-            game.snake.direction = {1, 0};
-            game.gameRunning = true;
-        }
-
         ClearBackground(green);
         DrawRectangleLinesEx(Rectangle{
                                  static_cast<float>(offset) - 5,
@@ -218,10 +228,27 @@ int main() {
                                  static_cast<float>(cellSize * cellCount + 10)
                              },
                              5, darkGreen);
+
         game.Draw();
+
+        if (!game.gameRunning) {
+            DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), Fade(BLACK, 0.6f));
+
+            DrawText("GAME OVER!",
+                     offset + cellSize * cellCount / 2 - MeasureText("GAME OVER!", 50) / 2,
+                     offset + cellSize * cellCount / 2 - 50,
+                     50, green);
+
+            DrawText("Press SPACE to restart or ESC to close",
+                     offset + cellSize * cellCount / 2 - MeasureText("Press SPACE to Restart or ESC to close", 30) / 2,
+                     offset + cellSize * cellCount / 2 + 20,
+                     30, green);
+        }
         EndDrawing();
     }
 
     CloseWindow();
-    return 0;
+
+    return
+            0;
 }
