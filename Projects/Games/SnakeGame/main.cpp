@@ -4,30 +4,22 @@
 // unless it breaks something, and I'm doing this because I'm making the assumption it'll teach me something
 // about best-practices as well as maintainable, well-structured code.
 
+#include <deque>
+
 #include "pch.h"
 
 // Global values
-auto green = Color(173, 204, 96, 255);
-auto darkGreen = Color(43, 51, 24, 255);
+constexpr auto green = Color(173, 204, 96, 255);
+constexpr auto darkGreen = Color(43, 51, 24, 255);
 
-int cellSize = 30;
-int cellCount = 25;
-int offset = 75;
+constexpr int cellSize = 30;
+constexpr int cellCount = 25;
+constexpr int offset = 75;
 
-double lastUpdateTime = 0;
-
-bool ElementInDeque(const Vector2 element, const std::deque<Vector2> &deque) {
-    return std::ranges::any_of(deque, [&element](const Vector2 &i) {
+bool ElementInDeque(const Vector2 element, const auto &start, const auto &end) {
+    return std::ranges::any_of(start, end, [&element](const Vector2 &i) {
         return Vector2Equals(i, element);
     });
-};
-
-bool eventTriggered(const double interval) {
-    if (const double currentTime = GetTime(); currentTime - lastUpdateTime >= interval) {
-        lastUpdateTime = currentTime;
-        return true;
-    }
-    return false;
 }
 
 // Le snek
@@ -38,21 +30,35 @@ public:
     Vector2 nextDirection{};
     bool shouldGrow = false;
 
-    void ProcessInput(const Vector2 newDirection) {
-        if (newDirection.x == -direction.x && newDirection.y == -direction.y) return;
+    enum class Direction {
+        Up,
+        Down,
+        Left,
+        Right
+    };
 
-        if ((newDirection.x == 0 || direction.x == 0) &&
-            (newDirection.y == 0 || direction.y == 0)) {
-            nextDirection = newDirection;
+    void ProcessInput(const Direction newDirection) {
+        Vector2 newDirVector = {0, 0};
+        switch (newDirection) {
+            case Direction::Up: newDirVector = {0, -1};
+                break;
+            case Direction::Down: newDirVector = {0, 1};
+                break;
+            case Direction::Left: newDirVector = {-1, 0};
+                break;
+            case Direction::Right: newDirVector = {1, 0};
+                break;
         }
+
+        if (newDirVector.x == -direction.x && newDirVector.y == -direction.y) return;
+
+        nextDirection = newDirVector;
     }
 
     void UpdateSnake() {
-        if (nextDirection.x != 0 || nextDirection.y != 0) {
+        if (!(nextDirection.x == -direction.x && nextDirection.y == -direction.y)) {
             direction = nextDirection;
-            nextDirection = {0, 0};
         }
-
         const Vector2 newHead = Vector2Add(body.front(), direction);
         body.push_front(newHead);
         if (!shouldGrow) {
@@ -76,7 +82,7 @@ public:
     void Reset() {
         body = {Vector2{6, 9}, Vector2{5, 9}, Vector2{4, 9}};
         direction = {1, 0};
-        nextDirection = {0, 0};
+        nextDirection = {1, 0};
     }
 };
 
@@ -116,8 +122,14 @@ public:
     }
 
     static Vector2 GenerateRandomPos(const std::deque<Vector2> &snakeBody) {
+        int attempts = 0;
+
         Vector2 position = GenerateRandomCell();
-        while (ElementInDeque(position, snakeBody)) {
+        while (ElementInDeque(position, snakeBody.begin(), snakeBody.end())) {
+            if (constexpr int maxAttempts = 1000; ++attempts > maxAttempts) {
+                std::cerr << "Failed to generate food position! " << std::endl;
+                break;
+            }
             position = GenerateRandomCell();
         }
         return position;
@@ -168,9 +180,8 @@ public:
     }
 
     void CheckCollisionWithTail() {
-        std::deque<Vector2> headlessBody = snake.body;
-        headlessBody.pop_front();
-        if (ElementInDeque(snake.body.front(), headlessBody)) {
+        if (ElementInDeque(snake.body.front(),
+                           std::next(snake.body.begin()), snake.body.end())) {
             GameOver();
         }
     }
@@ -195,10 +206,10 @@ int main() {
     while (!WindowShouldClose()) {
         BeginDrawing();
 
-        if (IsKeyPressed(KEY_UP)) game.snake.ProcessInput({0, -1});
-        if (IsKeyPressed(KEY_DOWN)) game.snake.ProcessInput({0, 1});
-        if (IsKeyPressed(KEY_LEFT)) game.snake.ProcessInput({-1, 0});
-        if (IsKeyPressed(KEY_RIGHT)) game.snake.ProcessInput({1, 0});
+        if (IsKeyPressed(KEY_UP)) game.snake.ProcessInput(Snake::Direction::Up);
+        if (IsKeyPressed(KEY_DOWN)) game.snake.ProcessInput(Snake::Direction::Down);
+        if (IsKeyPressed(KEY_LEFT)) game.snake.ProcessInput(Snake::Direction::Left);
+        if (IsKeyPressed(KEY_RIGHT)) game.snake.ProcessInput(Snake::Direction::Right);
 
         if (!game.gameRunning && IsKeyPressed(KEY_SPACE)) {
             game.gameRunning = true;
@@ -210,15 +221,11 @@ int main() {
         const float deltaTime = GetFrameTime();
         accumulatedTime += deltaTime;
 
-        float speedMultiplier;
-        if (IsKeyDown(KEY_SPACE)) {
-            speedMultiplier = 2.0f;
-        } else {
-            speedMultiplier = 1.0f;
-        }
-        const float effectiveInterval = moveInterval / speedMultiplier;
+        accumulatedTime = std::min(accumulatedTime, moveInterval);
 
-        while (accumulatedTime >= effectiveInterval) {
+        const float speedMultiplier = IsKeyDown(KEY_SPACE) ? 2.0f : 1.0f;
+
+        if (const float effectiveInterval = moveInterval / speedMultiplier; accumulatedTime >= effectiveInterval) {
             game.Update();
             accumulatedTime -= effectiveInterval;
         }
@@ -256,9 +263,6 @@ int main() {
         }
         EndDrawing();
     }
-
     CloseWindow();
-
-    return
-            0;
+    return 0;
 }
