@@ -1,4 +1,4 @@
-## Snake Game
+## Space Invaders Game
 
 > [!IMPORTANT]  
 > This project uses [raylib](https://github.com/raysan5/raylib) you will not be able to compile the project without the library.
