@@ -3,9 +3,6 @@
 //This project is written in CLion, and so I use its Clang-Tidy and I do follow it pretty blindly and try to resolve every suggestion it has
 // unless it breaks something, and I'm doing this because I'm making the assumption it'll teach me something
 // about best-practices as well as maintainable, well-structured code.
-
-#include <deque>
-
 #include "pch.h"
 
 // Global values
