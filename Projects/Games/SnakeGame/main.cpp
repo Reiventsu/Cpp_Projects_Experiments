@@ -220,8 +220,6 @@ int main() {
         const float deltaTime = GetFrameTime();
         accumulatedTime += deltaTime;
 
-        accumulatedTime = std::min(accumulatedTime, moveInterval);
-
         const float speedMultiplier = IsKeyDown(KEY_SPACE) ? 2.0f : 1.0f;
 
         if (const float effectiveInterval = moveInterval / speedMultiplier; accumulatedTime >= effectiveInterval) {
