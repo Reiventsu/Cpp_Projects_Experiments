@@ -50,15 +50,15 @@ public:
                 break;
         }
 
-        if (newDirVector.x == -direction.x && newDirVector.y == -direction.y) return;
-
-        nextDirection = newDirVector;
+        if (!(newDirVector.x == -direction.x && newDirVector.y == -direction.y)) {
+            nextDirection = newDirVector;
+        }
     }
 
     void UpdateSnake() {
-        if (!(nextDirection.x == -direction.x && nextDirection.y == -direction.y)) {
-            direction = nextDirection;
-        }
+        direction = nextDirection;
+        nextDirection = direction;
+
         const Vector2 newHead = Vector2Add(body.front(), direction);
         body.push_front(newHead);
         if (!shouldGrow) {
@@ -67,7 +67,7 @@ public:
         shouldGrow = false;
     }
 
-    void drawSnake() const {
+    void DrawSnake() const {
         for (const auto &[x, y]: body) {
             const auto segment = Rectangle{
                 static_cast<float>(offset) + x * static_cast<float>(cellSize),
@@ -103,7 +103,7 @@ public:
         UnloadTexture(texture);
     }
 
-    void drawFood() const {
+    void DrawFood() const {
         DrawTexture(
             texture,
             offset + static_cast<int>(position.x) * cellSize,
@@ -166,8 +166,8 @@ public:
     }
 
     void Draw() const {
-        food.drawFood();
-        snake.drawSnake();
+        food.DrawFood();
+        snake.DrawSnake();
     }
 
     void CheckCollisionWithEdges() {
