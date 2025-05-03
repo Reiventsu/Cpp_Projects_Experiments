@@ -11,6 +11,8 @@ add_executable(SpaceInvadersGame
         src/spaceship.h
         src/game.cpp
         src/game.h
+        src/laser.cpp
+        src/laser.h
 )
 target_link_libraries(SpaceInvadersGame PRIVATE
         raylib glfw

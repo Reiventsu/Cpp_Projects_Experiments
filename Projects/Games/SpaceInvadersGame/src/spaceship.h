@@ -4,6 +4,8 @@
 
 #pragma once
 #include "raylib.h"
+#include "laser.h"
+#include <vector>
 
 class SpaceShip {
 public:
@@ -18,10 +20,10 @@ public:
     void MoveRight();
 
     void FireLaser();
+    std::vector<Laser> lasers;
 
 private:
     Texture2D image{};
     Vector2 position{};
-
-
+    double lastFireTime{};
 };

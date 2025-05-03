@@ -18,5 +18,6 @@ public:
     void ProcessInput();
 
 private:
+    void KillInactiveLasers();
     SpaceShip spaceShip;
 };
