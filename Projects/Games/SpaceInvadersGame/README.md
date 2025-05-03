@@ -14,6 +14,6 @@ I'm done writing the code to see how that changes my understanding of the progra
 ---
 
 ```
-Project status: just started.
+Project status: Getting somewhere now.
 
 ```
