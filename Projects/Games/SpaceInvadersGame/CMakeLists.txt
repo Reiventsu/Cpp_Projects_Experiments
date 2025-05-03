@@ -7,6 +7,8 @@ find_package(raylib CONFIG REQUIRED)
 
 add_executable(SpaceInvadersGame
         src/main.cpp
+        src/spaceship.cpp
+        src/spaceship.h
 )
 target_link_libraries(SpaceInvadersGame PRIVATE
         raylib glfw
