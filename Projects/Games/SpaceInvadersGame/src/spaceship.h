@@ -11,7 +11,7 @@ public:
 
     ~SpaceShip();
 
-    void Draw() const;
+    void Draw();
 
     void MoveLeft();
 

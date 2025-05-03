@@ -2,7 +2,7 @@
 // Created by rei on 4/16/25.
 //
 #include "pch.h"
-#include "spaceship.h"
+#include "game.h"
 
 // Global values
 Color grey = {29, 29, 27, 255};
@@ -14,10 +14,15 @@ int main() {
     InitWindow(windowWidth, windowHeight, "SpaceInvadersGame");
     SetTargetFPS(60);
 
+    Game game;
+
     while (!WindowShouldClose()) {
+
+        game.ProcessInput();
 
         BeginDrawing();
         ClearBackground(grey);
+        game.Draw();
 
         EndDrawing();
     }
