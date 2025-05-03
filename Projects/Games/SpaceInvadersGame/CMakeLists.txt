@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(raylib CONFIG REQUIRED)
 
 add_executable(SpaceInvadersGame
-        main.cpp
+        src/main.cpp
 )
 target_link_libraries(SpaceInvadersGame PRIVATE
         raylib glfw
