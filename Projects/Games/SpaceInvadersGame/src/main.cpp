@@ -5,7 +5,6 @@
 #include "game.h"
 #include <string>
 
-
 // Global values
 Color grey = {29, 29, 27, 255};
 constexpr int windowWidth = 750;
