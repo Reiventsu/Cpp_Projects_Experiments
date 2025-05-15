@@ -1,7 +1,10 @@
 //
 // Created by rei on 4/16/25.
 //
-#include "pch.h"
+#include <raylib.h>
+#include "game.h"
+#include <string>
+
 
 // Global values
 Color grey = {29, 29, 27, 255};

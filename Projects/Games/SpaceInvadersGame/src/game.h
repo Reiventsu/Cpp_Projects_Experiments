@@ -20,6 +20,7 @@ public:
 
 private:
     void KillInactiveLasers();
+    std::vector<Obstacle> CreateObstacles();
     SpaceShip spaceShip;
     std::vector<Obstacle> obstacles;
 };
