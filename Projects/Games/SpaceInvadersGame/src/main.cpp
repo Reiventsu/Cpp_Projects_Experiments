@@ -13,7 +13,6 @@ int main() {
     SetTargetFPS(60);
 
     Game game;
-    Obstacle obstacle = Obstacle({100, 100});
 
     while (!WindowShouldClose()) {
 
@@ -23,7 +22,6 @@ int main() {
         BeginDrawing();
         ClearBackground(grey);
         game.Draw();
-        obstacle.Draw();
 
         EndDrawing();
     }

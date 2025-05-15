@@ -2,9 +2,9 @@
 // Created by rei on 5/15/25.
 //
 
-#include "Obstacle.h"
+#include "obstacle.h"
 
-Obstacle::Obstacle(Vector2 position) {
+Obstacle::obstacle(Vector2 position) {
     this->position = position;
 
     grid = {

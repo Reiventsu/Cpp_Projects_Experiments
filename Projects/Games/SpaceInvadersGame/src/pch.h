@@ -7,4 +7,4 @@
 #include <raylib.h>
 #include "game.h"
 #include "laser.h"
-#include "Obstacle.h"
+#include "obstacle.h"
