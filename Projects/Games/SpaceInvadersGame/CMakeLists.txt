@@ -13,6 +13,10 @@ add_executable(SpaceInvadersGame
         src/game.h
         src/laser.cpp
         src/laser.h
+        src/block.cpp
+        src/block.h
+        src/Obstacle.cpp
+        src/Obstacle.h
 )
 target_link_libraries(SpaceInvadersGame PRIVATE
         raylib glfw

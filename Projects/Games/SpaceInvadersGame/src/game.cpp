@@ -14,6 +14,7 @@ void Game::Update() {
     for (auto &laser: spaceShip.lasers) {
         laser.Update();
     }
+    KillInactiveLasers();
 }
 
 void Game::Draw() {
@@ -22,7 +23,6 @@ void Game::Draw() {
     for (auto &laser: spaceShip.lasers) {
         laser.Draw();
     }
-    KillInactiveLasers();
 }
 
 void Game::ProcessInput() {
