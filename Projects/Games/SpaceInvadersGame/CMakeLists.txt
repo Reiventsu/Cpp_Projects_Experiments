@@ -19,6 +19,8 @@ add_executable(SpaceInvadersGame
         src/obstacle.h
         src/alien.cpp
         src/alien.h
+        src/mysteryship.cpp
+        src/mysteryship.h
 )
 target_link_libraries(SpaceInvadersGame PRIVATE
         raylib glfw

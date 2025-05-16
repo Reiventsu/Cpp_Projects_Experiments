@@ -29,8 +29,13 @@ private:
     SpaceShip spaceShip;
 
     void MoveAliens();
+    void MoveDownAliens(int distance);
+    void AlienShootLaser();
 
     std::vector<Obstacle> obstacles;
     std::vector<Alien> aliens;
     int aliensDirection;
+    std::vector<Laser> alienLasers;
+    constexpr static float alienLaserShootInterval = 0.35;
+    float timeLastAlienFired;
 };

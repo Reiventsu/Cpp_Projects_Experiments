@@ -3,10 +3,14 @@
 //
 #include "game.h"
 
+#include <cstdlib>
+#include <iomanip>
+
 Game::Game() {
     obstacles = CreateObstacles();
     aliens = CreateAliens();
     aliensDirection = 1;
+    timeLastAlienFired = 0;
 }
 
 Game::~Game() {
@@ -18,6 +22,11 @@ void Game::Update() {
         laser.Update();
     }
     MoveAliens();
+    AlienShootLaser();
+
+    for (auto &laser: alienLasers) {
+        laser.Update();
+    }
     KillInactiveLasers();
 }
 
@@ -35,6 +44,9 @@ void Game::Draw() {
     for (auto &alien: aliens) {
         alien.Draw();
     }
+    for (auto &laser: alienLasers) {
+        laser.Draw();
+    }
 }
 
 void Game::ProcessInput() {
@@ -51,6 +63,13 @@ void Game::KillInactiveLasers() {
     for (auto it = spaceShip.lasers.begin(); it != spaceShip.lasers.end();) {
         if (!it->active) {
             it = spaceShip.lasers.erase(it);
+        } else {
+            ++it;
+        }
+    }
+    for (auto it = alienLasers.begin(); it != alienLasers.end();) {
+        if (!it->active) {
+            it = alienLasers.erase(it);
         } else {
             ++it;
         }
@@ -92,11 +111,32 @@ void Game::MoveAliens() {
     for (auto &alien: aliens) {
         if (alien.position.x + alien.alienImages[alien.type - 1].width > GetScreenWidth()) {
             aliensDirection = -1;
+            MoveDownAliens(4);
         }
         if (alien.position.x < 0) {
             aliensDirection = 1;
+            MoveDownAliens(4);
         }
 
         alien.Update(aliensDirection);
+    }
+}
+
+void Game::MoveDownAliens(int distance) {
+    for (auto &alien: aliens) {
+        alien.position.y += distance;
+    }
+}
+
+void Game::AlienShootLaser() {
+    double currentTime = GetTime();
+    if (currentTime - timeLastAlienFired >= alienLaserShootInterval && !aliens.empty()) {
+        int randomIndex = GetRandomValue(0, aliens.size() - 1);
+        Alien &alien = aliens[randomIndex];
+        alienLasers.push_back(Laser({
+                                        alien.position.x + alien.alienImages[alien.type - 1].width / 2,
+                                        alien.position.y + alien.alienImages[alien.type - 1].height
+                                    }, 6));
+        timeLastAlienFired = GetTime();
     }
 }
