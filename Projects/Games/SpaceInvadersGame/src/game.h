@@ -21,10 +21,16 @@ public:
 
 private:
     void KillInactiveLasers();
+
     std::vector<Obstacle> CreateObstacles();
+
     std::vector<Alien> CreateAliens();
+
     SpaceShip spaceShip;
+
+    void MoveAliens();
+
     std::vector<Obstacle> obstacles;
     std::vector<Alien> aliens;
-
+    int aliensDirection;
 };

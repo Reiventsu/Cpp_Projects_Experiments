@@ -6,15 +6,18 @@
 Game::Game() {
     obstacles = CreateObstacles();
     aliens = CreateAliens();
+    aliensDirection = 1;
 }
 
 Game::~Game() {
+    Alien::UnloadImages();
 }
 
 void Game::Update() {
     for (auto &laser: spaceShip.lasers) {
         laser.Update();
     }
+    MoveAliens();
     KillInactiveLasers();
 }
 
@@ -68,10 +71,32 @@ std::vector<Obstacle> Game::CreateObstacles() {
 std::vector<Alien> Game::CreateAliens() {
     for (int row = 0; row < 5; row++) {
         for (int col = 0; col < 11; col++) {
-            float x = col * 55;
-            float y = row * 55;
-            aliens.push_back(Alien(1, {x, y}));
+            int alienType;
+            if (row == 0) {
+                alienType = 3;
+            } else if (row == 1 || row == 2) {
+                alienType = 2;
+            } else {
+                alienType = 1;
+            }
+
+            float x = 75 + col * 55;
+            float y = 110 + row * 55;
+            aliens.push_back(Alien(alienType, {x, y}));
         }
     }
     return aliens;
+}
+
+void Game::MoveAliens() {
+    for (auto &alien: aliens) {
+        if (alien.position.x + alien.alienImages[alien.type - 1].width > GetScreenWidth()) {
+            aliensDirection = -1;
+        }
+        if (alien.position.x < 0) {
+            aliensDirection = 1;
+        }
+
+        alien.Update(aliensDirection);
+    }
 }
