@@ -43,5 +43,5 @@ private:
     float timeLastAlienFired;
     MysteryShip mysteryShip;
     float mysteryShipSpawnInterval;
-    float mysteryShiptimeLastSpawn;
+    float mysteryShipTimeLastSpawn;
 };
