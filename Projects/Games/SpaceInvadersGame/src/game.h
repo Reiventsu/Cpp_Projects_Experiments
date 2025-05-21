@@ -35,6 +35,8 @@ private:
 
     void AlienShootLaser();
 
+    void CheckForCollision();
+
     std::vector<Obstacle> obstacles;
     std::vector<Alien> aliens;
     int aliensDirection;

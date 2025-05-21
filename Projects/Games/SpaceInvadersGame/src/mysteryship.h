@@ -12,6 +12,7 @@ public:
     ~MysteryShip();
     void Update();
     void Draw();
+    Rectangle getRect();
     void Spawn();
     bool IsAlive;
 private:

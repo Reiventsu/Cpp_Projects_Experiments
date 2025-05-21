@@ -20,7 +20,6 @@ Game::~Game() {
 }
 
 void Game::Update() {
-
     double currentTime = GetTime();
     if (currentTime - mysteryShipTimeLastSpawn > mysteryShipSpawnInterval) {
         mysteryShip.Spawn();
@@ -39,6 +38,7 @@ void Game::Update() {
     }
     KillInactiveLasers();
     mysteryShip.Update();
+    CheckForCollision();
 }
 
 void Game::Draw() {
@@ -150,5 +150,20 @@ void Game::AlienShootLaser() {
                                         alien.position.y + alien.alienImages[alien.type - 1].height
                                     }, 6));
         timeLastAlienFired = GetTime();
+    }
+}
+
+void Game::CheckForCollision() {
+    // Spaceship Lasers
+    for (auto &laser: spaceShip.lasers) {
+        auto it = aliens.begin();
+        while (it != aliens.end()) {
+            if (CheckCollisionRecs(it->getRect(), laser.getRect())) {
+                it = aliens.erase(it);
+                laser.active = false;
+            } else {
+                ++it;
+            }
+        }
     }
 }

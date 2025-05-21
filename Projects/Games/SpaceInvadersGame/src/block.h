@@ -12,6 +12,8 @@ public:
 
     void Draw();
 
+    Rectangle getRect();
+
 private:
     Vector2 position;
 };
