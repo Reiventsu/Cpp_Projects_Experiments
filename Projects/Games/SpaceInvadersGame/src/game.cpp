@@ -5,6 +5,7 @@
 
 #include <cstdlib>
 #include <iomanip>
+#include <iostream>
 
 Game::Game() {
     obstacles = CreateObstacles();
@@ -163,6 +164,41 @@ void Game::CheckForCollision() {
                 laser.active = false;
             } else {
                 ++it;
+            }
+        }
+
+        for (auto &obstacle: obstacles) {
+            auto it = obstacle.blocks.begin();
+            while (it != obstacle.blocks.end()) {
+                if (CheckCollisionRecs(it->getRect(), laser.getRect())) {
+                    it = obstacle.blocks.erase(it);
+                    laser.active = false;
+                } else {
+                    ++it;
+                }
+            }
+        }
+        if (CheckCollisionRecs(mysteryShip.getRect(), laser.getRect())) {
+            mysteryShip.IsAlive = false;
+            laser.active = false;
+        }
+    }
+
+    // Alien Lasers
+    for (auto &laser: alienLasers) {
+        if (CheckCollisionRecs(laser.getRect(), spaceShip.getRect())) {
+            laser.active = false;
+            std::cout << "spaceShip hit" << std::endl;
+        }
+        for (auto &obstacle: obstacles) {
+            auto it = obstacle.blocks.begin();
+            while (it != obstacle.blocks.end()) {
+                if (CheckCollisionRecs(it->getRect(), laser.getRect())) {
+                    it = obstacle.blocks.erase(it);
+                    laser.active = false;
+                } else {
+                    ++it;
+                }
             }
         }
     }
