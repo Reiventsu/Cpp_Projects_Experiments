@@ -15,6 +15,7 @@ constexpr int windowHeight = 700;
 int main() {
     InitWindow(windowWidth + offset, windowHeight + 2 * offset, "SpaceInvadersGame");
     Font font = LoadFontEx("../Fonts/monogram.ttf", 64, 0, 0);
+    Texture2D spaceshipImage = LoadTexture("../Graphics/spaceship.png");
     SetTargetFPS(60);
 
     Game game;
@@ -27,7 +28,20 @@ int main() {
         ClearBackground(grey);
         DrawRectangleRoundedLinesEx({10, 10, 780, 780}, 0.18f, 20, 2, yellow);
         DrawLineEx({25, 730}, {775, 730}, 3, yellow);
-        DrawTextEx(font, "LEVEL 01", {570, 740}, 34, 2, yellow);
+
+        if (game.IsGameRunning) {
+            DrawTextEx(font, "LEVEL 01", {570, 740}, 34, 2, yellow);
+        } else {
+            DrawTextEx(font, "GAME OVER", {570, 740}, 34, 2, yellow);
+        }
+
+        // Shows the lives the player has left
+        float x = 50.0;
+        for (int i = 0; i < game.playerLives; i++) {
+            DrawTextureV(spaceshipImage, {x, 745}, WHITE);
+            x += 50.0;
+        }
+
         game.Draw();
 
         EndDrawing();

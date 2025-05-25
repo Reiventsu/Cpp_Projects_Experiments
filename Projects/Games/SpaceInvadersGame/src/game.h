@@ -21,6 +21,7 @@ public:
     void ProcessInput();
 
     bool IsGameRunning;
+    int playerLives;
 
 private:
     void KillInactiveLasers();
@@ -52,5 +53,4 @@ private:
     MysteryShip mysteryShip;
     float mysteryShipSpawnInterval;
     float mysteryShipTimeLastSpawn;
-    int playerLives;
 };
