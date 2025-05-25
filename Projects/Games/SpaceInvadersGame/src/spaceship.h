@@ -20,9 +20,12 @@ public:
     void MoveRight();
 
     void FireLaser();
-    std::vector<Laser> lasers;
+
+    void ResetPlayerShip();
 
     Rectangle getRect();
+
+    std::vector<Laser> lasers;
 
 private:
     Texture2D image{};

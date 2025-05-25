@@ -39,6 +39,7 @@ void Game::Update() {
     } else {
         if (IsKeyDown(KEY_ENTER)) {
             ResetGame();
+            InitGame();
         }
     }
 }
@@ -233,6 +234,10 @@ void Game::GameOver() {
 }
 
 void Game::ResetGame() {
+    spaceShip.ResetPlayerShip();
+    aliens.clear();
+    alienLasers.clear();
+    obstacles.clear();
 }
 
 void Game::InitGame() {
