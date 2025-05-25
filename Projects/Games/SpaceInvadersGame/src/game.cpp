@@ -259,7 +259,7 @@ void Game::InitGame() {
     playerScore = 0;
     playerHighScore = LoadHighScore();
     IsGameRunning = true;
-    mysteryShipSpawnInterval = GetRand omValue(10, 20);
+    mysteryShipSpawnInterval = GetRandomValue(10, 20);
 }
 
 void Game::CheckForHighScore() {
