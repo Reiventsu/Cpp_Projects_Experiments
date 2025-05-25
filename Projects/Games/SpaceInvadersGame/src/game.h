@@ -23,6 +23,7 @@ public:
     bool IsGameRunning;
     int playerLives;
     int playerScore;
+    int playerHighScore;
 
 private:
     void KillInactiveLasers();
@@ -46,6 +47,10 @@ private:
     void ResetGame();
 
     void InitGame();
+
+    void CheckForHighScore();
+    void SaveHighScore(int playerHighScore);
+    int LoadHighScore();
 
     std::vector<Obstacle> obstacles;
     std::vector<Alien> aliens;

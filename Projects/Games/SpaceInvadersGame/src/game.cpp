@@ -2,10 +2,8 @@
 // Created by rei on 5/3/25.
 //
 #include "game.h"
-
-#include <cstdlib>
-#include <iomanip>
 #include <iostream>
+#include <fstream>
 
 Game::Game() {
     InitGame();
@@ -171,6 +169,7 @@ void Game::CheckForCollision() {
                 } else if (it->type == 3) {
                     playerScore += 300;
                 }
+                CheckForHighScore();
 
                 it = aliens.erase(it);
                 laser.active = false;
@@ -194,6 +193,7 @@ void Game::CheckForCollision() {
             mysteryShip.IsAlive = false;
             laser.active = false;
             playerScore += 500;
+            CheckForHighScore();
         }
     }
 
@@ -257,6 +257,36 @@ void Game::InitGame() {
     mysteryShipTimeLastSpawn = 0;
     playerLives = 3;
     playerScore = 0;
+    playerHighScore = LoadHighScore();
     IsGameRunning = true;
-    mysteryShipSpawnInterval = GetRandomValue(10, 20);
+    mysteryShipSpawnInterval = GetRand omValue(10, 20);
+}
+
+void Game::CheckForHighScore() {
+    if (playerScore > playerHighScore) {
+        playerHighScore = playerScore;
+        SaveHighScore(playerHighScore);
+    }
+}
+
+void Game::SaveHighScore(int playerHighScore) {
+    std::ofstream highScoreFile("highscore.txt");
+    if (highScoreFile.is_open()) {
+        highScoreFile << playerHighScore;
+        highScoreFile.close();
+    } else {
+        std::cerr << "Unable to save highscore to file" << std::endl;
+    }
+}
+
+int Game::LoadHighScore() {
+    int loadedHighScore = 0;
+    std::ifstream highScoreFile("highscore.txt");
+    if (highScoreFile.is_open()) {
+        highScoreFile >> loadedHighScore;
+        highScoreFile.close();
+    } else {
+        std::cerr << "Unable to load highscore from file" << std::endl;
+    }
+    return loadedHighScore;
 }
