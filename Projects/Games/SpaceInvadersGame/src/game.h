@@ -22,6 +22,7 @@ public:
 
     bool IsGameRunning;
     int playerLives;
+    int playerScore;
 
 private:
     void KillInactiveLasers();
@@ -41,7 +42,9 @@ private:
     void CheckForCollision();
 
     void GameOver();
+
     void ResetGame();
+
     void InitGame();
 
     std::vector<Obstacle> obstacles;

@@ -5,6 +5,14 @@
 #include "game.h"
 #include <string>
 
+
+// Template function for score
+std::string FormatWithLeadingZeros(int number, int width) {
+    std::string numberText = std::to_string(number);
+    int leadingZeros = 5 - numberText.length();
+    return numberText = std::string(leadingZeros, '0') + numberText;
+}
+
 // Global values
 constexpr Color grey = {29, 29, 27, 255};
 constexpr Color yellow = {243, 216, 63, 255};
@@ -42,8 +50,12 @@ int main() {
             x += 50.0;
         }
 
-        game.Draw();
+        // Handling score
+        DrawTextEx(font, "SCORE", {50, 15}, 34, 2, yellow);
+        std::string scoreText = FormatWithLeadingZeros(game.playerScore, 5);
+        DrawTextEx(font, scoreText.c_str(), {50, 40}, 34, 2, yellow);
 
+        game.Draw();
         EndDrawing();
     }
 
