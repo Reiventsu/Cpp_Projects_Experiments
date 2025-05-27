@@ -7,10 +7,10 @@
 
 
 // Template function for score
-std::string FormatWithLeadingZeros(int number, int width) {
-    std::string numberText = std::to_string(number);
-    int leadingZeros = 5 - numberText.length();
-    return numberText = std::string(leadingZeros, '0') + numberText;
+std::string FormatWithLeadingZeros(const int number, const int width) {
+    const std::string numberText = std::to_string(number);
+    const int leadingZeros = std::max(width - static_cast<int>(numberText.length()), 0);
+    return std::string(leadingZeros, '0') + numberText;
 }
 
 // Global values
@@ -22,8 +22,8 @@ constexpr int windowHeight = 700;
 
 int main() {
     InitWindow(windowWidth + offset, windowHeight + 2 * offset, "SpaceInvadersGame");
-    Font font = LoadFontEx("../Fonts/monogram.ttf", 64, 0, 0);
-    Texture2D spaceshipImage = LoadTexture("../Graphics/spaceship.png");
+    const Font font = LoadFontEx("../Fonts/monogram.ttf", 64, nullptr, 0);
+    const Texture2D spaceshipImage = LoadTexture("../Graphics/spaceship.png");
     SetTargetFPS(60);
 
     Game game;

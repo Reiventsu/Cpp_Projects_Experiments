@@ -11,12 +11,12 @@ public:
     MysteryShip();
     ~MysteryShip();
     void Update();
-    void Draw();
-    Rectangle getRect();
+    void Draw() const;
+    [[nodiscard]] Rectangle getRect() const;
     void Spawn();
     bool IsAlive;
 private:
-    Vector2 position;
-    Texture2D image;
-    int speed;
+    Vector2 position{};
+    Texture2D image{};
+    int speed{};
 };

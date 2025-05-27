@@ -8,13 +8,12 @@
 
 class Obstacle {
 public:
-    Obstacle(Vector2 position);
+    explicit Obstacle(Vector2 position);
 
-    void Draw();
+    void Draw() const;
 
-    Vector2 position;
+    Vector2 position{};
     std::vector<Block> blocks;
     static std::vector<std::vector<int> > grid;
 
-private:
 };

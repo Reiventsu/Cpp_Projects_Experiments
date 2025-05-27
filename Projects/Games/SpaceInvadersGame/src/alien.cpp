@@ -6,7 +6,7 @@
 
 Texture2D Alien::alienImages[3] = {};
 
-Alien::Alien(int type, Vector2 position) {
+Alien::Alien(const int type, const Vector2 position) {
     this->type = type;
     this->position = position;
 
@@ -28,28 +28,28 @@ Alien::Alien(int type, Vector2 position) {
         }
 }
 
-void Alien::Draw() {
+void Alien::Draw() const {
     DrawTextureV(alienImages[type - 1], position, WHITE);
 }
 
-int Alien::GetType() {
+int Alien::GetType() const {
     return type;
 }
 
 void Alien::UnloadImages() {
-    for (int i = 0; i < 4; i++) {
-        UnloadTexture(alienImages[i]);
+    for (const auto& texture : alienImages) {
+        UnloadTexture(texture);
     }
 }
 
-Rectangle Alien::getRect() {
+Rectangle Alien::getRect() const {
     return {
         position.x, position.y,
-        float(alienImages[type - 1].width),
-        float(alienImages[type - 1].height)
+        static_cast<float>(alienImages[type - 1].width),
+        static_cast<float>(alienImages[type - 1].height)
     };
 }
 
-void Alien::Update(int direction) {
-    position.x += direction;
+void Alien::Update(const int direction) {
+    position.x += static_cast<float>(direction);
 }

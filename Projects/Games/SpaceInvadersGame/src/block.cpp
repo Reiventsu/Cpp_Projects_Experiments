@@ -4,15 +4,15 @@
 
 #include "block.h"
 
-Block::Block(Vector2 Position) {
-    this->position = Position;
+Block::Block(const Vector2 position) {
+    this->position = position;
 }
 
-void Block::Draw() {
-    DrawRectangle(position.x, position.y, 3, 3, {243, 216, 63, 255});
+void Block::Draw() const {
+    DrawRectangle(static_cast<int>(position.x), static_cast<int>(position.y), 3, 3, {243, 216, 63, 255});
 }
 
-Rectangle Block::getRect() {
+Rectangle Block::getRect() const {
     Rectangle rect;
     rect.x = position.x;
     rect.y = position.y;

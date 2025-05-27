@@ -15,11 +15,10 @@ Game::~Game() {
 
 void Game::Update() {
     if (IsGameRunning) {
-        double currentTime = GetTime();
-        if (currentTime - mysteryShipTimeLastSpawn > mysteryShipSpawnInterval) {
+        if (const auto currentTime = GetTime(); currentTime - mysteryShipTimeLastSpawn > mysteryShipSpawnInterval) {
             mysteryShip.Spawn();
-            mysteryShipTimeLastSpawn = GetTime();
-            mysteryShipSpawnInterval = GetRandomValue(10, 20);
+            mysteryShipTimeLastSpawn = static_cast<float>(GetTime());
+            mysteryShipSpawnInterval = static_cast<float>(GetRandomValue(10, 20));
         }
 
         for (auto &laser: spaceShip.lasers) {
@@ -42,7 +41,7 @@ void Game::Update() {
     }
 }
 
-void Game::Draw() {
+void Game::Draw() const {
     spaceShip.Draw();
 
     for (auto &laser: spaceShip.lasers) {
@@ -92,12 +91,14 @@ void Game::KillInactiveLasers() {
 }
 
 std::vector<Obstacle> Game::CreateObstacles() {
-    int obstacleWidth = Obstacle::grid[0].size() * 3;
-    float gap = (GetScreenWidth() - (4 * obstacleWidth)) / 5;
+    const float obstacleWidth = static_cast<float>(Obstacle::grid[0].size()) * 3;
+    const float gap = (static_cast<float>(GetScreenWidth()) - 4 * obstacleWidth) / 5;
 
     for (int i = 0; i < 4; i++) {
-        float offsetX = (i + 1) * gap + i * obstacleWidth;
-        obstacles.push_back(Obstacle({offsetX, float(GetScreenHeight() - 200)}));
+        const float offsetX =
+                (static_cast<float>(i) + 1.0f) * gap +
+                static_cast<float>(i) * obstacleWidth;
+        obstacles.push_back(Obstacle({offsetX, static_cast<float>(GetScreenHeight() - 200)}));
     }
     return obstacles;
 }
@@ -114,8 +115,8 @@ std::vector<Alien> Game::CreateAliens() {
                 alienType = 1;
             }
 
-            float x = 75 + col * 55;
-            float y = 110 + row * 55;
+            const float x = static_cast<float>(75) + static_cast<float>(col) * 55;
+            const float y = static_cast<float>(110) + static_cast<float>(row) * 55;
             aliens.push_back(Alien(alienType, {x, y}));
         }
     }
@@ -124,35 +125,36 @@ std::vector<Alien> Game::CreateAliens() {
 
 void Game::MoveAliens() {
     for (auto &alien: aliens) {
-        if (alien.position.x + alien.alienImages[alien.type - 1].width > GetScreenWidth() - 25) {
+        const auto alienWidth = static_cast<float>(Alien::alienImages[alien.type - 1].width);
+
+        if (const auto screenWidth = static_cast<float>(GetScreenWidth()); alien.position.x + alienWidth > screenWidth - 25.0f) {
             aliensDirection = -1;
-            MoveDownAliens(4);
+            MoveDownAliens();
         }
-        if (alien.position.x < 25) {
+        if (alien.position.x < 25.0f) {
             aliensDirection = 1;
-            MoveDownAliens(4);
+            MoveDownAliens();
         }
 
         alien.Update(aliensDirection);
     }
 }
 
-void Game::MoveDownAliens(int distance) {
+void Game::MoveDownAliens() {
     for (auto &alien: aliens) {
-        alien.position.y += distance;
+        alien.position.y += 4;
     }
 }
 
 void Game::AlienShootLaser() {
-    double currentTime = GetTime();
-    if (currentTime - timeLastAlienFired >= alienLaserShootInterval && !aliens.empty()) {
-        int randomIndex = GetRandomValue(0, aliens.size() - 1);
-        Alien &alien = aliens[randomIndex];
+    if (const double currentTime = GetTime(); currentTime - timeLastAlienFired >= alienLaserShootInterval && !aliens.empty()) {
+        const auto randomIndex = GetRandomValue(0, static_cast<int>(aliens.size()) - 1);
+        const Alien &alien = aliens[randomIndex];
         alienLasers.push_back(Laser({
-                                        alien.position.x + alien.alienImages[alien.type - 1].width / 2,
-                                        alien.position.y + alien.alienImages[alien.type - 1].height
+                                        alien.position.x + static_cast<float>(Alien::alienImages[alien.type - 1].width) / 2,
+                                        alien.position.y + static_cast<float>(Alien::alienImages[alien.type - 1].height)
                                     }, 6));
-        timeLastAlienFired = GetTime();
+        timeLastAlienFired = static_cast<float>(GetTime());
     }
 }
 
@@ -179,13 +181,13 @@ void Game::CheckForCollision() {
         }
 
         for (auto &obstacle: obstacles) {
-            auto it = obstacle.blocks.begin();
-            while (it != obstacle.blocks.end()) {
-                if (CheckCollisionRecs(it->getRect(), laser.getRect())) {
-                    it = obstacle.blocks.erase(it);
+            auto obstacle_it = obstacle.blocks.begin();
+            while (obstacle_it != obstacle.blocks.end()) {
+                if (CheckCollisionRecs(obstacle_it->getRect(), laser.getRect())) {
+                    obstacle_it = obstacle.blocks.erase(obstacle_it);
                     laser.active = false;
                 } else {
-                    ++it;
+                    ++obstacle_it;
                 }
             }
         }
@@ -259,7 +261,7 @@ void Game::InitGame() {
     playerScore = 0;
     playerHighScore = LoadHighScore();
     IsGameRunning = true;
-    mysteryShipSpawnInterval = GetRandomValue(10, 20);
+    mysteryShipSpawnInterval = static_cast<float>(GetRandomValue(10, 20));
 }
 
 void Game::CheckForHighScore() {
@@ -269,9 +271,8 @@ void Game::CheckForHighScore() {
     }
 }
 
-void Game::SaveHighScore(int playerHighScore) {
-    std::ofstream highScoreFile("highscore.txt");
-    if (highScoreFile.is_open()) {
+void Game::SaveHighScore(const int playerHighScore) {
+    if (std::ofstream highScoreFile("highscore.txt"); highScoreFile.is_open()) {
         highScoreFile << playerHighScore;
         highScoreFile.close();
     } else {
@@ -281,8 +282,7 @@ void Game::SaveHighScore(int playerHighScore) {
 
 int Game::LoadHighScore() {
     int loadedHighScore = 0;
-    std::ifstream highScoreFile("highscore.txt");
-    if (highScoreFile.is_open()) {
+    if (std::ifstream highScoreFile("highscore.txt"); highScoreFile.is_open()) {
         highScoreFile >> loadedHighScore;
         highScoreFile.close();
     } else {

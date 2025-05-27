@@ -10,13 +10,13 @@ public:
 
     void Update();
 
-    void Draw();
+    void Draw() const;
 
-    Rectangle getRect();
+    [[nodiscard]] Rectangle getRect() const;
 
     bool active;
 
 private:
-    Vector2 position;
+    Vector2 position{};
     int speed;
 };

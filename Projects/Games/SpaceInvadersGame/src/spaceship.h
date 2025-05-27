@@ -13,7 +13,7 @@ public:
 
     ~SpaceShip();
 
-    void Draw();
+    void Draw() const;
 
     void MoveLeft();
 
@@ -23,7 +23,7 @@ public:
 
     void ResetPlayerShip();
 
-    Rectangle getRect();
+    [[nodiscard]] Rectangle getRect() const;
 
     std::vector<Laser> lasers;
 

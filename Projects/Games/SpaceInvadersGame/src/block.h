@@ -8,12 +8,12 @@
 
 class Block {
 public:
-    Block(Vector2 position);
+    explicit Block(Vector2 position);
 
-    void Draw();
+    void Draw() const;
 
-    Rectangle getRect();
+    [[nodiscard]] Rectangle getRect() const;
 
 private:
-    Vector2 position;
+    Vector2 position{};
 };

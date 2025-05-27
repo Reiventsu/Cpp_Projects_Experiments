@@ -20,22 +20,22 @@ std::vector<std::vector<int> > Obstacle::grid = {
     {1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1}
 };
 
-Obstacle::Obstacle(Vector2 position) {
+Obstacle::Obstacle(const Vector2 position) {
     this->position = position;
 
-    for (unsigned int row = 0; row < grid.size(); row++) {
-        for (unsigned int col = 0; col < grid[0].size(); col++) {
+    for (auto row = 0u; row < grid.size(); row++) {
+        for (auto col = 0u; col < grid[0].size(); col++) {
             if (grid[row][col] == 1) {
-                float pos_x = position.x + col * 3;
-                float pos_y = position.y + row * 3;
-                Block block = Block({pos_x, pos_y});
+                const float pos_x = position.x + static_cast<float>(col) * 3.0f;
+                const float pos_y = position.y + static_cast<float>(row) * 3.0f;
+                auto block = Block({pos_x, pos_y});
                 blocks.push_back(block);
             }
         }
     }
 }
 
-void Obstacle::Draw() {
+void Obstacle::Draw() const {
     for (auto &block: blocks) {
         block.Draw();
     }

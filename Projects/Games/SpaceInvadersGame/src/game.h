@@ -14,16 +14,16 @@ public:
 
     ~Game();
 
-    void Draw();
+    void Draw() const;
 
     void Update();
 
     void ProcessInput();
 
-    bool IsGameRunning;
-    int playerLives;
-    int playerScore;
-    int playerHighScore;
+    bool IsGameRunning{};
+    int playerLives{};
+    int playerScore{};
+    int playerHighScore{};
 
 private:
     void KillInactiveLasers();
@@ -36,7 +36,7 @@ private:
 
     void MoveAliens();
 
-    void MoveDownAliens(int distance);
+    void MoveDownAliens();
 
     void AlienShootLaser();
 
@@ -49,16 +49,16 @@ private:
     void InitGame();
 
     void CheckForHighScore();
-    void SaveHighScore(int playerHighScore);
-    int LoadHighScore();
+    static void SaveHighScore(int playerHighScore);
+    static int LoadHighScore();
 
     std::vector<Obstacle> obstacles;
     std::vector<Alien> aliens;
-    int aliensDirection;
+    int aliensDirection{};
     std::vector<Laser> alienLasers;
     constexpr static float alienLaserShootInterval = 0.35;
-    float timeLastAlienFired;
+    float timeLastAlienFired{};
     MysteryShip mysteryShip;
-    float mysteryShipSpawnInterval;
-    float mysteryShipTimeLastSpawn;
+    float mysteryShipSpawnInterval{};
+    float mysteryShipTimeLastSpawn{};
 };

@@ -15,12 +15,11 @@ MysteryShip::~MysteryShip() {
 
 void MysteryShip::Spawn() {
     position.y = 90;
-    int side = GetRandomValue(0, 1);
-    if (side == 0) {
+    if (const int side = GetRandomValue(0, 1); side == 0) {
         position.x = 25;
         speed = 3;
     } else {
-        position.x = GetScreenWidth() - image.width - 25;
+        position.x = static_cast<float>(GetScreenWidth()) - static_cast<float>(image.width) - 25;
         speed = -3;
     }
     IsAlive = true;
@@ -28,23 +27,22 @@ void MysteryShip::Spawn() {
 
 void MysteryShip::Update() {
     if (IsAlive) {
-        position.x += speed;
-        if (position.x > GetScreenWidth() - image.width -25 || position.x < 25) {
+        position.x += static_cast<float>(speed);
+        if (static_cast<int>(position.x) > GetScreenWidth() - image.width -25 || position.x < 25) {
             IsAlive = false;
         }
     }
 }
 
-void MysteryShip::Draw() {
+void MysteryShip::Draw() const {
     if (IsAlive) {
         DrawTextureV(image, position, WHITE);
     }
 }
 
-Rectangle MysteryShip::getRect() {
+Rectangle MysteryShip::getRect() const {
     if (IsAlive) {
-        return {position.x, position.y, float(image.width), float(image.height)};
-    } else {
-        return {position.x, position.y, 0, 0};
+        return {position.x, position.y, static_cast<float>(image.width), static_cast<float>(image.height)};
     }
+    return {position.x, position.y, 0, 0};
 }
