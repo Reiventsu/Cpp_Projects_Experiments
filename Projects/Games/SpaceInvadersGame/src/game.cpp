@@ -106,13 +106,13 @@ std::vector<Obstacle> Game::CreateObstacles() {
 std::vector<Alien> Game::CreateAliens() {
     for (int row = 0; row < 5; row++) {
         for (int col = 0; col < 11; col++) {
-            int alienType;
+            Alien::Type alienType;
             if (row == 0) {
-                alienType = 3;
+                alienType = Alien::Type::LARGE;
             } else if (row == 1 || row == 2) {
-                alienType = 2;
+                alienType = Alien::Type::MEDIUM;
             } else {
-                alienType = 1;
+                alienType = Alien::Type::SMALL;
             }
 
             const float x = static_cast<float>(75) + static_cast<float>(col) * 55;
@@ -125,7 +125,8 @@ std::vector<Alien> Game::CreateAliens() {
 
 void Game::MoveAliens() {
     for (auto &alien: aliens) {
-        const auto alienWidth = static_cast<float>(Alien::alienImages[alien.type - 1].width);
+        const auto index = static_cast<int>(alien.type);
+        const auto alienWidth = static_cast<float>(Alien::alienImages[index].width);
 
         if (const auto screenWidth = static_cast<float>(GetScreenWidth()); alien.position.x + alienWidth > screenWidth - 25.0f) {
             aliensDirection = -1;
@@ -136,7 +137,7 @@ void Game::MoveAliens() {
             MoveDownAliens();
         }
 
-        alien.Update(aliensDirection);
+        alien.update(aliensDirection);
     }
 }
 
@@ -150,9 +151,10 @@ void Game::AlienShootLaser() {
     if (const double currentTime = GetTime(); currentTime - timeLastAlienFired >= alienLaserShootInterval && !aliens.empty()) {
         const auto randomIndex = GetRandomValue(0, static_cast<int>(aliens.size()) - 1);
         const Alien &alien = aliens[randomIndex];
+        const auto index = static_cast<int>(alien.type);
         alienLasers.push_back(Laser({
-                                        alien.position.x + static_cast<float>(Alien::alienImages[alien.type - 1].width) / 2,
-                                        alien.position.y + static_cast<float>(Alien::alienImages[alien.type - 1].height)
+                                        alien.position.x + static_cast<float>(Alien::alienImages[index].width) / 2,
+                                        alien.position.y + static_cast<float>(Alien::alienImages[index].height)
                                     }, 6));
         timeLastAlienFired = static_cast<float>(GetTime());
     }
@@ -164,11 +166,11 @@ void Game::CheckForCollision() {
         auto it = aliens.begin();
         while (it != aliens.end()) {
             if (CheckCollisionRecs(it->getRect(), laser.getRect())) {
-                if (it->type == 1) {
+                if (it->type == Alien::Type::SMALL) {
                     playerScore += 100;
-                } else if (it->type == 2) {
+                } else if (it->type == Alien::Type::MEDIUM) {
                     playerScore += 200;
-                } else if (it->type == 3) {
+                } else if (it->type == Alien::Type::LARGE) {
                     playerScore += 300;
                 }
                 CheckForHighScore();
