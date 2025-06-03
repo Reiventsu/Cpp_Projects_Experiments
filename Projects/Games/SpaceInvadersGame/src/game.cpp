@@ -175,8 +175,12 @@ void Game::CheckForCollision() {
                 }
                 CheckForHighScore();
 
-                it = aliens.erase(it);
+                if (it != aliens.end() - 1) {
+                    *it = aliens.back();
+                }
+                aliens.pop_back();
                 laser.active = false;
+                break;
             } else {
                 ++it;
             }
