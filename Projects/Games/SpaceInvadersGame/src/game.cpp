@@ -128,7 +128,8 @@ void Game::MoveAliens() {
         const auto index = static_cast<int>(alien.type);
         const auto alienWidth = static_cast<float>(Alien::alienImages[index].width);
 
-        if (const auto screenWidth = static_cast<float>(GetScreenWidth()); alien.position.x + alienWidth > screenWidth - 25.0f) {
+        if (const auto screenWidth = static_cast<float>(GetScreenWidth());
+            alien.position.x + alienWidth > screenWidth - 25.0f) {
             aliensDirection = -1;
             MoveDownAliens();
         }
@@ -148,7 +149,8 @@ void Game::MoveDownAliens() {
 }
 
 void Game::AlienShootLaser() {
-    if (const double currentTime = GetTime(); currentTime - timeLastAlienFired >= alienLaserShootInterval && !aliens.empty()) {
+    if (const double currentTime = GetTime(); currentTime - timeLastAlienFired >= alienLaserShootInterval && !aliens.
+                                              empty()) {
         const auto randomIndex = GetRandomValue(0, static_cast<int>(aliens.size()) - 1);
         const Alien &alien = aliens[randomIndex];
         const auto index = static_cast<int>(alien.type);
@@ -226,8 +228,8 @@ void Game::CheckForCollision() {
             }
         }
     }
-    // Alien Collision with obstacles
 
+    // Alien Collision with obstacles
     for (auto &alien: aliens) {
         for (auto &obstacle: obstacles) {
             auto it = obstacle.blocks.begin();
